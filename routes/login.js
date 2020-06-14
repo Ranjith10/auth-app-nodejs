@@ -24,32 +24,34 @@ router.get('/', (req, res) => {
 })
 
 router.post('/register', async (req,res) => {
-    const password = req.body.password;
-    // const encryptedPassword = await bcrypt.genSalt(10, function(err, salt) {
-    //                                     bcrypt.hash(password, salt, function(err, hash) {
-    //                                         // Store hash in your password DB.
-    //                                     });
-    //                                 });
-    
-    const users = {
-        "email": req.body.email,
-        "password": password, 
+    try {
+        const password = req.body.password;
+        const salt = await bcrypt.genSalt(10)
+        const encryptedPassword = await bcrypt.hash(password, salt)
+        const users = {
+            "email": req.body.email,
+            "password": encryptedPassword, 
+        }
+        
+        connection.query('INSERT INTO `users` SET ?',users, function (error, results, fields) {
+            if (error) {
+                res.send({
+                    "code":400,
+                    "failed":"error ocurred",
+                    "err": error
+                })
+            } else {
+                    res.send({
+                        "code":200,
+                        "success":"user registered sucessfully"
+                    });
+                }
+        });
+    }
+    catch(err) {
+        console.log(err)
     }
     
-    connection.query('INSERT INTO `users` SET ?',users, function (error, results, fields) {
-        if (error) {
-            res.send({
-                "code":400,
-                "failed":"error ocurred",
-                "err": error
-            })
-        } else {
-                res.send({
-                    "code":200,
-                    "success":"user registered sucessfully"
-                });
-            }
-    });
 
 }) 
 
