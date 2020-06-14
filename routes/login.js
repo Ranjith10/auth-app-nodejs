@@ -2,7 +2,6 @@ const express = require('express')
 const mysql = require('mysql')
 const bcrypt = require('bcryptjs');
 const router = express.Router()
-const salt = bcrypt.genSaltSync(10);
 
 const connection = mysql.createConnection({
     host     : process.env.DB_HOST,
@@ -24,28 +23,35 @@ router.get('/', (req, res) => {
     console.log("In root")
 })
 
-register = async function(req,res){
+router.post('/register', async (req,res) => {
     const password = req.body.password;
-    const encryptedPassword = await bcrypt.hash(password, saltRounds)
-  
-    var users={
-       "email":req.body.email,
-       "password":encryptedPassword
+    // const encryptedPassword = await bcrypt.genSalt(10, function(err, salt) {
+    //                                     bcrypt.hash(password, salt, function(err, hash) {
+    //                                         // Store hash in your password DB.
+    //                                     });
+    //                                 });
+    
+    const users = {
+        "email": req.body.email,
+        "password": password, 
     }
     
-    connection.query('INSERT INTO users SET ?',users, function (error, results, fields) {
+    connection.query('INSERT INTO `users` SET ?',users, function (error, results, fields) {
         if (error) {
             res.send({
-            "code":400,
-            "failed":"error ocurred"
+                "code":400,
+                "failed":"error ocurred",
+                "err": error
             })
         } else {
                 res.send({
-                "code":200,
-                "success":"user registered sucessfully"
-                    });
+                    "code":200,
+                    "success":"user registered sucessfully"
+                });
             }
-        });
-}
+    });
+
+}) 
+
 
 module.exports = router  
