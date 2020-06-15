@@ -40,7 +40,6 @@ router.post('/register', async (req,res) => {
         let inserts = ['users', users]
 
         connection.query(findEmailExistsQuery, findEmailExistsInserts, function(err, results, fields) {
-            console.log(results[0].count)
             if(err) {
                 res.send({
                     "code": 400,
