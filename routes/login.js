@@ -33,33 +33,39 @@ router.post('/register', async (req,res) => {
             "password": encryptedPassword, 
         }
         
-        let findEmailExistsQuery = 'SELECT COUNT(*) FROM ?? WHERE email = ?'
+        let findEmailExistsQuery = 'SELECT COUNT(*) as count FROM ?? WHERE email = ?'
         let findEmailExistsInserts = ['users', users.email]
 
         let insertUserRecordQuery = 'INSERT INTO ?? SET ?'
         let inserts = ['users', users]
 
-        connection.query(findEmailExistsInserts, findEmailExistsInserts, function(err, results, fields) {
-            console.log({err, results, fields})
-            if(results.length === 1) {
+        connection.query(findEmailExistsQuery, findEmailExistsInserts, function(err, results, fields) {
+            console.log(results[0].count)
+            if(err) {
+                res.send({
+                    "code": 400,
+                    "failed": "error occurred"
+                })
+            }
+            if(results[0].count === 0) {
                 connection.query(insertUserRecordQuery,inserts, function (error, results, fields) {
                     if (error) {
                         res.send({
                             "code":400,
-                            "failed":"error ocurred",
+                            "message":"error ocurred",
                             "err": error
                         })
                     } else {
                             res.send({
                                 "code":200,
-                                "success":"user registered sucessfully"
+                                "message":"user registered sucessfully"
                             });
                         }
                 });
             } else {
                 res.send({
-                    "code": 200,
-                    "failer": "User already registered"
+                    "code": 405,
+                    "message": "User already registered"
                 })
             }
         })
