@@ -80,19 +80,25 @@ router.post('/login', async (req, res) => {
     let email = req.body.email
     let password = req.body.password
 
-    let authenticateQuery = 'SELECT COUNT(*) AS count FROM ?? WHERE email = ?'
+    let authenticateQuery = 'SELECT COUNT(*) AS count,password FROM ?? WHERE email = ?'
     let authenticateInserts = ['users', email]
 
-    connection.query(authenticateQuery, authenticateInserts, (err, results, fields) => {
+    connection.query(authenticateQuery, authenticateInserts, async (err, results, fields) => {
         if(err) {
             res.status(400).send({
                 "message": "Error occurred",
             })
         } else {
             if(results[0].count > 0) {
-                res.send({"message": "Email is registered"})
+                let isPasswordMatched = await bcrypt.compare(password, results[0].password)
+                if(isPasswordMatched) {
+                    res.status(200).send({"message": "Valid user"})
+                } else {
+                    res.status(401).send({"message": "Password does not match"})
+                }
+                
             } else {
-                res.status(207).send({
+                res.status(401).send({
                     "message": "Email is not registered"
                 })
             }
