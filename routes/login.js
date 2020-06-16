@@ -73,9 +73,33 @@ router.post('/register', async (req,res) => {
     catch(err) {
         console.log(err)
     }
-    
-
 }) 
+
+
+router.post('/login', async (req, res) => {
+    let email = req.body.email
+    let password = req.body.password
+
+    let authenticateQuery = 'SELECT COUNT(*) AS count FROM ?? WHERE email = ?'
+    let authenticateInserts = ['users', email]
+
+    connection.query(authenticateQuery, authenticateInserts, (err, results, fields) => {
+        if(err) {
+            res.status(400).send({
+                "message": "Error occurred",
+            })
+        } else {
+            if(results[0].count > 0) {
+                res.send({"message": "Email is registered"})
+            } else {
+                res.status(207).send({
+                    "message": "Email is not registered"
+                })
+            }
+        }
+    })
+
+})
 
 
 module.exports = router  
