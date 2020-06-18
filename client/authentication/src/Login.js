@@ -7,32 +7,46 @@ const Login = () => {
     const [password, setPassword] = useState('')
 
     const handleLoginSubmit= (event) => {
+        event.preventDefault()
         console.log({event})
     }
 
     return (
         <div className = 'login-wrapper'>
-            <form onSubmit = {handleLoginSubmit}>
+            <div className = 'app-title'>
+                Login to the Demo App
+            </div>
+            <form 
+                onSubmit = {handleLoginSubmit}
+                autoComplete = 'off'
+            >
                 <div>
-                    <label htmlFor = 'emailInput '>Email ID</label>
                     <input 
                         type = 'email'
                         value = {email}
                         onChange = {(e) => setEmail(e.target.value)}
                         className = 'email-input'
                         id = 'emailInput'
+                        placeholder = "Enter the registered E-mail"
                     />
                 </div>
                 <div>
-                    <label htmlFor = 'passwordInput'>Password</label>
                     <input 
                         type = 'password'
                         value = {password}
                         onChange = {(e) => setPassword(e.target.value)}
                         className = 'password-input'
                         id = 'passwordInput'
+                        placeholder = "Enter the password"
                     />
                 </div>
+                <button 
+                    type = 'submit'
+                    onClick = {handleLoginSubmit}
+                    className = 'login-submit-button'
+                >
+                    Login
+                </button>
             </form>
         </div>
     )
