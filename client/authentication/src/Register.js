@@ -5,10 +5,22 @@ import './Register.css';
 const Register = (props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [repeatPassword, setRepeatPassword] = useState('')
     const [name, setName] = useState('')
+    const [passwordErrorMessage, setPasswordErrorMessage] = useState(false)
 
     const handleRegisterSubmit = (event) => {
         event.preventDefault()
+    }
+
+    const handleReenterPassword = (event) => {
+        let repeatedPassword = event.target.value
+        setRepeatPassword(repeatedPassword)
+        if(repeatedPassword !== password) {
+            setPasswordErrorMessage(true)
+        } else {
+            setPasswordErrorMessage(false)
+        }    
     }
 
     return (
@@ -47,6 +59,23 @@ const Register = (props) => {
                         placeholder = "Enter your password"
                     />
                 </div>
+                <div>
+                    <input 
+                        type = 'password'
+                        value = {repeatPassword}
+                        onChange = {(e) => setRepeatPassword(e.target.value)}
+                        onBlur = {(e) => handleReenterPassword(e)}
+                        className = 'register-password-input'
+                        placeholder = "Re-Enter your password"
+                    />
+                    <i class = 'fas fa-eye'/>
+                </div>
+                {
+                    passwordErrorMessage 
+                        ?
+                            <div>Passwords do not match, re-enter the password</div>
+                        :   null
+                }
                 <button 
                     type = 'submit'
                     onClick = {handleRegisterSubmit}
