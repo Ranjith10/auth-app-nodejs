@@ -48,14 +48,6 @@ const Login = () => {
                     Login
                 </button>
             </form>
-            <div className = 'other-user-actions'>
-                <div className = 'forgot-password'>
-                    Forgot Password?
-                </div>
-                <div className = 'sign-up'>
-                    Sign up for app
-                </div>
-            </div>
         </div>
     )
 }
