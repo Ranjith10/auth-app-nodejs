@@ -3,7 +3,8 @@
   flex-direction: column;
   height: 100vh;
   justify-content: center;
-  align-items: center
+  align-items: center;
+  background-color: #F9F9F9;
 }
 .login-submit-button {
   display: flex;
@@ -33,4 +34,8 @@
   margin-right: 10px;
   color: #1B9DE7;
   cursor: text;
+}
+.other-user-actions > a {
+  text-decoration: none;
+  color: #1B9DE7;
 }

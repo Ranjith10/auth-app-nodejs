@@ -68,7 +68,6 @@ const Register = (props) => {
                         className = 'register-password-input'
                         placeholder = "Re-Enter your password"
                     />
-                    <i class = 'fas fa-eye'/>
                 </div>
                 {
                     passwordErrorMessage 

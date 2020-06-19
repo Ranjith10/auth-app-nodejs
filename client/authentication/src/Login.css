@@ -36,7 +36,7 @@ form > div > input {
     font-size: 16px;
 }
 form > div > input:focus {
-    background-color: #F5F8FA;
+    background-color: #E8F0FE;
     border: none;
     outline-style: none;
     border-bottom: 1px solid #1DA1F2;
