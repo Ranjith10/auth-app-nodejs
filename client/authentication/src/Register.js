@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import Swal from 'sweetalert2'
 
 import './Register.css';
 
@@ -33,9 +34,25 @@ const Register = (props) => {
         event.preventDefault()
         let isFormValid = handleFormValidation()
         if(isFormValid) {
-            alert("Successfully registered")
+            Swal.fire({
+                title: 'Registration successful',
+                text: 'You have registered with us successfully!, Click Ok to take you to Login',
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonText: 'Ok!',
+            }).then((result) =>{
+                if(result.value) {
+                    window.location.href = '/login'
+                }
+            })
         } else {
-            alert("Please fill all fields")
+            Swal.fire({
+                title: 'Registration Failed',
+                text: 'Please fill all the fields',
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonText: 'Ok',
+            })
         }
     }
 
