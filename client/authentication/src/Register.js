@@ -7,19 +7,45 @@ const Register = (props) => {
     const [password, setPassword] = useState('')
     const [repeatPassword, setRepeatPassword] = useState('')
     const [name, setName] = useState('')
-    const [passwordErrorMessage, setPasswordErrorMessage] = useState(false)
+    const [isPasswordValid, setIsPasswordValid] = useState(true)
+    const [isEmailValid, setIsEmailValid] = useState(true)
+    
+    const validateEmail = (event) => {
+        let email = event.target.value;
+        let isEmailValid = new RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g).test(`${email}`)
+        setIsEmailValid(isEmailValid)
+    }
+
+    const handleFormValidation = () => {
+        if(name.length > 0 && email.length > 0 && password.length > 0 && repeatPassword.length > 0) {
+            if(isPasswordValid && isEmailValid) {
+                return true
+            } else if (!isEmailValid) {
+                return false
+            } else if (!isPasswordValid) {
+                return false
+            }
+        }
+        return false
+    }
 
     const handleRegisterSubmit = (event) => {
         event.preventDefault()
+        let isFormValid = handleFormValidation()
+        if(isFormValid) {
+            alert("Successfully registered")
+        } else {
+            alert("Please fill all fields")
+        }
     }
 
     const handleReenterPassword = (event) => {
         let repeatedPassword = event.target.value
         setRepeatPassword(repeatedPassword)
         if(repeatedPassword !== password) {
-            setPasswordErrorMessage(true)
+            setIsPasswordValid(false)
         } else {
-            setPasswordErrorMessage(false)
+            setIsPasswordValid(true)
         }    
     }
 
@@ -39,15 +65,18 @@ const Register = (props) => {
                         onChange = {(e) => setName(e.target.value)}
                         className = 'register-name-input'
                         placeholder = "Enter your name"
+                        required 
                     />
                 </div>
                 <div>
                     <input 
                         type = 'email'
                         value = {email}
+                        onBlur = {(e) => validateEmail(e)}
                         onChange = {(e) => setEmail(e.target.value)}
                         className = 'register-email-input'
                         placeholder = "Enter your E-mail"
+                        required 
                     />
                 </div>
                 <div>
@@ -57,6 +86,7 @@ const Register = (props) => {
                         onChange = {(e) => setPassword(e.target.value)}
                         className = 'register-password-input'
                         placeholder = "Enter your password"
+                        required
                     />
                 </div>
                 <div>
@@ -67,10 +97,16 @@ const Register = (props) => {
                         onBlur = {(e) => handleReenterPassword(e)}
                         className = 'register-password-input'
                         placeholder = "Re-Enter your password"
+                        required
                     />
                 </div>
                 {
-                    passwordErrorMessage 
+                    !isEmailValid
+                        ? <div>Please enter a valid Email ID</div>
+                        :   null
+                }
+                {
+                    !isPasswordValid 
                         ?
                             <div>Passwords do not match, re-enter the password</div>
                         :   null

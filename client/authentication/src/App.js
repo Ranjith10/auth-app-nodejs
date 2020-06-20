@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {NavLink, BrowserRouter as Router, Route} from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {Link, BrowserRouter as Router, Route} from 'react-router-dom';
 
 import Register from './Register'
 import Login from './Login'; 
@@ -7,6 +7,12 @@ import './App.css';
 
 const App = () => {
   const [isSignup, setIsSignup] = useState(false)
+
+  useEffect(() => {
+      if(window.location.href.includes('/register')) {
+          setIsSignup(true)
+      }
+  }, [])
 
   const handleSignup = () => {
     setIsSignup(true)
@@ -29,11 +35,11 @@ const App = () => {
                                 <div className = 'other-action-text'>
                                     Already have an account!
                                 </div>
-                                <NavLink to = '/login'>
+                                <Link to = '/login'>
                                     <div className = 'sign-up' onClick = {() => handleLogin()}>
                                         Login
                                     </div>
-                                </NavLink>
+                                </Link>
                             </div>
                         </>
                         }
@@ -46,11 +52,11 @@ const App = () => {
                                 <div className = 'forgot-password'>
                                     Forgot Password?
                                 </div>
-                                <NavLink to ='/register'>
+                                <Link to ='/register'>
                                     <div className = 'sign-up' onClick = {() => handleSignup()}>
                                         Sign up for app
                                     </div>
-                                </NavLink>
+                                </Link>
                             </div>    
                         </>
                         } 
