@@ -12,6 +12,9 @@
 <li>Nodejs
 <li>Expressjs 4.x
 <li>Bcrytpjs
+<li>Reactjs
+<li>Axios
+<li>React-router-dom
 
 <strong>Gotchas</strong>
 <li>Avoid inputting user info directly in queries
