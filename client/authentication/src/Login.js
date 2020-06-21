@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 
-import './Login.css'
+import {loginUser} from './service/service';
+import './Login.css';
 
 const Login = () => {
     const [email, setEmail] = useState('')
@@ -8,7 +10,31 @@ const Login = () => {
 
     const handleLoginSubmit= (event) => {
         event.preventDefault()
-        console.log({event})
+        if(email.length === 0 || password.length === 0) {
+            Swal.fire({
+                title: 'Login Failed',
+                text: 'Please fill in all the details',
+                icon: 'error',
+                showCancelButton: false,
+                confirmButtonText: 'Ok',
+            })
+        } else {
+            loginUser(email, password)
+            .then((result) => {
+                if(result.status === 200) {
+                    window.location.href = 'https://reactjs.org'
+                } 
+            }).catch(err => {
+                Swal.fire({
+                    title: 'Login Failed',
+                    text: err.response.data.message,
+                    icon: 'error',
+                    showCancelButton: false,
+                    confirmButtonText: 'Ok',
+                })
+            })
+        }
+        
     }
 
     return (

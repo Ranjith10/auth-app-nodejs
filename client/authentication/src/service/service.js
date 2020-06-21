@@ -11,3 +11,15 @@ export const registerUser = (name, email, password) => {
         data: registerData
     })
 }
+
+export const loginUser = (email, password) => {
+    let loginData = {email , password}
+    return axios('/api/login', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'content-type': 'application/json',
+        },
+        data: loginData
+    })
+}
