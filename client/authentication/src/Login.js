@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import Swal from 'sweetalert2';
 
-import {loginUser} from './service/service';
+import {loginUser} from './service/Api';
 import './Login.css';
 
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    const handleLoginSubmit= (event) => {
+    const handleLoginSubmit= async (event) => {
         event.preventDefault()
         if(email.length === 0 || password.length === 0) {
             Swal.fire({
@@ -19,12 +19,12 @@ const Login = () => {
                 confirmButtonText: 'Ok',
             })
         } else {
-            loginUser(email, password)
-            .then((result) => {
+            try {
+                let result = await loginUser(email, password)
                 if(result.status === 200) {
                     window.location.href = 'https://reactjs.org'
-                } 
-            }).catch(err => {
+                }
+            } catch(err) {
                 Swal.fire({
                     title: 'Login Failed',
                     text: err.response.data.message,
@@ -32,7 +32,7 @@ const Login = () => {
                     showCancelButton: false,
                     confirmButtonText: 'Ok',
                 })
-            })
+            }
         }
         
     }

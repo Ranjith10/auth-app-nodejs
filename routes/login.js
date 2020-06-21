@@ -43,29 +43,25 @@ router.post('/register', async (req,res) => {
 
         connection.query(findEmailExistsQuery, findEmailExistsInserts, function(err, results, fields) {
             if(err) {
-                res.send({
-                    "code": 400,
-                    "failed": "error occurred"
+                results.status(400).send({
+                    "message": "error occurred"
                 })
             }
             if(results[0].count === 0) {
                 connection.query(insertUserRecordQuery,inserts, function (error, results, fields) {
                     if (error) {
-                        res.send({
-                            "code":400,
+                        res.status(400).send({
                             "message":"error ocurred",
                             "err": error
                         })
                     } else {
-                            res.send({
-                                "code":200,
+                            res.status(200).send({
                                 "message":"user registered sucessfully"
                             });
                         }
                 });
             } else {
-                res.send({
-                    "code": 405,
+                res.status(405).send({
                     "message": "User already registered"
                 })
             }

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-export const registerUser = (name, email, password) => {
+export const registerUser = async (name, email, password) => {
     let registerData = {name, email, password}
-    return axios('/api/register', {
+    let data = await axios('/api/register', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -10,11 +10,12 @@ export const registerUser = (name, email, password) => {
         },
         data: registerData
     })
+    return data
 }
 
-export const loginUser = (email, password) => {
+export const loginUser = async (email, password) => {
     let loginData = {email , password}
-    return axios('/api/login', {
+    let data = await axios('/api/login', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
@@ -22,4 +23,5 @@ export const loginUser = (email, password) => {
         },
         data: loginData
     })
+    return data
 }

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import Swal from 'sweetalert2'
 
-import {registerUser} from './service/service';
+import {registerUser} from './service/Api';
 import './Register.css';
 
 const Register = (props) => {
@@ -31,12 +31,14 @@ const Register = (props) => {
         return false
     }
 
-    const handleRegisterSubmit = (event) => {
+    const handleRegisterSubmit = async (event) => {
         event.preventDefault()
         let isFormValid = handleFormValidation()
         if(isFormValid) {
-            registerUser(name, email, password).then(result => {
-                if(result.data) {
+            try {
+                let result = await registerUser(name, email, password)
+                if(result.status === 200) {
+                    console.log(result)
                     Swal.fire({
                         title: 'Registration successful',
                         text: 'You have registered with us successfully!, Click Ok to take you to Login',
@@ -48,8 +50,16 @@ const Register = (props) => {
                             window.location.href = '/login'
                         }
                     })
-                }
-            })
+                } 
+            } catch(err) {
+                Swal.fire({
+                    title: 'Registration failed',
+                    text: 'Email id is already registered',
+                    icon: 'error',
+                    showCancelButton: false,
+                    confirmButtonText: 'Ok',
+                })
+            }
         } else {
             Swal.fire({
                 title: 'Registration Failed',
