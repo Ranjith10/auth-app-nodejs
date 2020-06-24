@@ -7,6 +7,7 @@ import './Login.css';
 const Login = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [role, setRole] = useState('')
 
     const handleLoginSubmit= async (event) => {
         event.preventDefault()
@@ -22,7 +23,8 @@ const Login = () => {
             try {
                 let result = await loginUser(email, password)
                 if(result.status === 200) {
-                    window.location.href = 'https://reactjs.org'
+                    // window.location.href = 'https://reactjs.org'
+                    setRole(result.data.role)
                 }
             } catch(err) {
                 Swal.fire({
