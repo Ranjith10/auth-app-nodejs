@@ -56,6 +56,7 @@ router.post('/register', async (req,res) => {
             "name": req.body.name,
             "email": req.body.email,
             "password": encryptedPassword, 
+            "role": req.body.role,
         }
         
         let findEmailExistsQuery = 'SELECT COUNT(*) as count FROM ?? WHERE email = ?'
@@ -101,7 +102,7 @@ router.post('/login', async (req, res) => {
     let email = req.body.email
     let password = req.body.password
 
-    let authenticateQuery = 'SELECT COUNT(*) AS count,password FROM ?? WHERE email = ?'
+    let authenticateQuery = 'SELECT COUNT(*) AS count, password, role FROM ?? WHERE email = ?'
     let authenticateInserts = ['users', email]
 
     connection.query(authenticateQuery, authenticateInserts, async (err, results, fields) => {
@@ -113,7 +114,11 @@ router.post('/login', async (req, res) => {
             if(results[0].count > 0) {
                 let isPasswordMatched = await bcrypt.compare(password, results[0].password)
                 if(isPasswordMatched) {
-                    res.status(200).send({"message": "Valid user"})
+                    console.log({results})
+                    res.status(200).send({
+                        "message": "Valid user",
+                        "role": results[0].role,
+                    })
                 } else {
                     res.status(401).send({"message": "Password does not match"})
                 }
