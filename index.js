@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const fs = require('fs')
 const path = require('path')
 const morgan = require('morgan')
-const login = require('./routes/login.js')
+const login = require('./routes/endpoint.js')
 
 //Express app
 const app = express()

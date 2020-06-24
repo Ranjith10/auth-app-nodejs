@@ -23,13 +23,36 @@ router.get('/', (req, res) => {
     console.log("In root")
 })
 
+//Get list of roles 
+router.get('/roles', async(req, res) => {
+    try {
+        let query = 'SELECT * FROM ??'
+        let roleInserts = ['roles']
+        connection.query(query, roleInserts, (err, results) => {
+            if(err) {
+                res.status(400).send({
+                    'message': `error occurred: ${err}`
+                })
+            } else {
+                console.log(results)
+                res.status(200).send(
+                    results
+                )
+            }
+        })
+    } catch (err) {
+        console.log("Error:", err)
+    }
+})
+
+//Registration API
 router.post('/register', async (req,res) => {
     try {
-        const password = req.body.password;
-        const salt = await bcrypt.genSalt(10)
-        const encryptedPassword = await bcrypt.hash(password, salt)
+        let password = req.body.password;
+        let salt = await bcrypt.genSalt(10)
+        let encryptedPassword = await bcrypt.hash(password, salt)
         
-        const users = {
+        let users = {
             "name": req.body.name,
             "email": req.body.email,
             "password": encryptedPassword, 
@@ -43,15 +66,15 @@ router.post('/register', async (req,res) => {
 
         connection.query(findEmailExistsQuery, findEmailExistsInserts, function(err, results, fields) {
             if(err) {
-                results.status(400).send({
-                    "message": "error occurred"
+                res.status(400).send({
+                    'message': `error occurred: ${err}`
                 })
             }
             if(results[0].count === 0) {
                 connection.query(insertUserRecordQuery,inserts, function (error, results, fields) {
                     if (error) {
                         res.status(400).send({
-                            "message":"error ocurred",
+                            'message': `error occurred: ${err}`,
                             "err": error
                         })
                     } else {
@@ -73,7 +96,7 @@ router.post('/register', async (req,res) => {
     }
 }) 
 
-
+//Login API
 router.post('/login', async (req, res) => {
     let email = req.body.email
     let password = req.body.password
