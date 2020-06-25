@@ -25,3 +25,15 @@ export const loginUser = async (email, password) => {
     })
     return data
 }
+
+export const getRoles = async () => {
+    let roles = await axios('/api/roles', {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json',
+            'content-type': 'application/json',
+        }
+    })
+
+    return roles
+}

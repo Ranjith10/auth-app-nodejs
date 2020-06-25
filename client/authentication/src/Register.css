@@ -57,3 +57,6 @@ form > div > input:focus {
     font-weight: 600;
     cursor: pointer;
 }
+.role-selection {
+    width: 63%;
+}

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {NavLink, BrowserRouter as Router, Route} from 'react-router-dom';
 
 import Register from './Register'

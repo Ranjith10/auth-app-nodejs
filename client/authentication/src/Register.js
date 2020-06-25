@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
-import Swal from 'sweetalert2'
+import React, {useState, useEffect} from 'react';
+import Swal from 'sweetalert2';
+import Select from 'react-select';
 
-import {registerUser} from './service/Api';
+import {registerUser, getRoles} from './service/Api';
 import './Register.css';
 
 const Register = (props) => {
@@ -11,7 +12,26 @@ const Register = (props) => {
     const [name, setName] = useState('')
     const [isPasswordValid, setIsPasswordValid] = useState(true)
     const [isEmailValid, setIsEmailValid] = useState(true)
-    
+    const [roles, setRoles] = useState([])
+    const [selectedRole, setSelectedRole] = useState(null)
+
+
+    const handleRoleSelection = (selectedRole) => {
+        setSelectedRole(selectedRole)
+    }
+
+    useEffect(() => {
+        const fetchRoles = async () =>  {
+            let roles = await getRoles()
+            let formattedRoles = []
+            roles.data.forEach(role => {
+                formattedRoles.push({label: role.role, value: role.id})
+            })
+            setRoles(formattedRoles)
+        }
+        fetchRoles()
+    }, [])
+
     const validateEmail = (event) => {
         let email = event.target.value;
         let isEmailValid = new RegExp(/[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,15}/g).test(`${email}`)
@@ -109,6 +129,15 @@ const Register = (props) => {
                         className = 'register-email-input'
                         placeholder = "Enter your E-mail"
                         required 
+                    />
+                </div>
+                <div>
+                    <Select 
+                        options = {roles}
+                        value = {selectedRole}
+                        onChange = {handleRoleSelection}
+                        className = 'role-selection'
+                        placeholder = 'Select a role'
                     />
                 </div>
                 <div>
