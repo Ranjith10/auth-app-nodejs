@@ -24,6 +24,12 @@ const Login = () => {
                 let result = await loginUser(email, password)
                 if(result.status === 200) {
                     // window.location.href = 'https://reactjs.org'
+                    Swal.fire({
+                        title: 'Login success',
+                        icon: 'success',
+                        showCancelButton: false,
+                        confirmButtonText: 'Ok',
+                    })
                     setRole(result.data.role)
                 }
             } catch(err) {

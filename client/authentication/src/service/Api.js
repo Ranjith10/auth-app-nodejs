@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-export const registerUser = async (name, email, password) => {
-    let registerData = {name, email, password}
+export const registerUser = async (name, email, password, role) => {
+    let registerData = {name, email, password, role}
     let data = await axios('/api/register', {
         method: 'POST',
         headers: {

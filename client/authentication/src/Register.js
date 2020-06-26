@@ -5,6 +5,24 @@ import Select from 'react-select';
 import {registerUser, getRoles} from './service/Api';
 import './Register.css';
 
+const customStyle = {
+    control : (base, state) => ({
+        ...base,
+        border: 'none',
+        display: 'flex',
+        background: '#fff',
+        padding: 5,
+        borderBottom: !state.isFocused ? '2px solid #657786' : '2px solid #1DA1F2',
+        boxShadow: 'none',
+        background: state.isFocused ? '#E8F0FE' : '#fff'
+    }),
+    option : (styles) => ({
+        ...styles,
+        paddingLeft: 15,
+        height: 40
+    })
+}
+
 const Register = (props) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -39,7 +57,7 @@ const Register = (props) => {
     }
 
     const handleFormValidation = () => {
-        if(name.length > 0 && email.length > 0 && password.length > 0 && repeatPassword.length > 0) {
+        if(name.length > 0 && email.length > 0 && password.length > 0 && repeatPassword.length > 0 && selectedRole) {
             if(isPasswordValid && isEmailValid) {
                 return true
             } else if (!isEmailValid) {
@@ -56,7 +74,7 @@ const Register = (props) => {
         let isFormValid = handleFormValidation()
         if(isFormValid) {
             try {
-                let result = await registerUser(name, email, password)
+                let result = await registerUser(name, email, password, selectedRole.label)
                 if(result.status === 200) {
                     console.log(result)
                     Swal.fire({
@@ -138,6 +156,7 @@ const Register = (props) => {
                         onChange = {handleRoleSelection}
                         className = 'role-selection'
                         placeholder = 'Select a role'
+                        styles = {customStyle}
                     />
                 </div>
                 <div>
