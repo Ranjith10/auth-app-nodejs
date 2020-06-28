@@ -1,6 +1,7 @@
 const express = require('express')
 const mysql = require('mysql')
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const router = express.Router()
 
 const connection = mysql.createConnection({
@@ -9,8 +10,10 @@ const connection = mysql.createConnection({
     password : process.env.DB_PASS,
     database : process.env.DB_NAME,
     port: process.env.DB_PORT
-  }); 
+}); 
   
+const secret = process.env.secret_key
+
 connection.connect(function(err) {
     if (err) {
         console.error('error connecting: ' + err.stack);
@@ -79,8 +82,13 @@ router.post('/register', async (req,res) => {
                             "err": error
                         })
                     } else {
+                            let token = jwt.sign({ id: results.insertId }, secret, {
+                                expiresIn: 86400 // expires in 24 hours
+                            })
                             res.status(200).send({
-                                "message":"user registered sucessfully"
+                                "message":"user registered sucessfully",
+                                auth: true,
+                                token,
                             });
                         }
                 });
@@ -102,7 +110,7 @@ router.post('/login', async (req, res) => {
     let email = req.body.email
     let password = req.body.password
 
-    let authenticateQuery = 'SELECT COUNT(*) AS count, password, role FROM ?? WHERE email = ?'
+    let authenticateQuery = 'SELECT COUNT(*) AS count, password, role, id FROM ?? WHERE email = ?'
     let authenticateInserts = ['users', email]
 
     connection.query(authenticateQuery, authenticateInserts, async (err, results, fields) => {
@@ -114,10 +122,14 @@ router.post('/login', async (req, res) => {
             if(results[0].count > 0) {
                 let isPasswordMatched = await bcrypt.compare(password, results[0].password)
                 if(isPasswordMatched) {
-                    console.log({results})
+                    let token = jwt.sign({ id: results[0].id }, secret, {
+                        expiresIn: 86400 // expires in 24 hours
+                    });
                     res.status(200).send({
                         "message": "Valid user",
                         "role": results[0].role,
+                        auth: true,
+                        token
                     })
                 } else {
                     res.status(401).send({"message": "Password does not match"})
