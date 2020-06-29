@@ -10,7 +10,6 @@ const customStyle = {
         ...base,
         border: 'none',
         display: 'flex',
-        background: '#fff',
         padding: 5,
         borderBottom: !state.isFocused ? '2px solid #657786' : '2px solid #1DA1F2',
         boxShadow: 'none',

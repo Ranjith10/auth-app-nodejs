@@ -24,6 +24,7 @@ const Login = () => {
                 let result = await loginUser(email, password)
                 if(result.status === 200) {
                     // window.location.href = 'https://reactjs.org'
+                    window.sessionStorage.setItem("token", result.data.token);
                     Swal.fire({
                         title: 'Login success',
                         icon: 'success',
