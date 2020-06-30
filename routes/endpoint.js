@@ -14,6 +14,7 @@ const connection = mysql.createConnection({
   
 const secret = process.env.secret_key
 
+//Establish DB connection
 connection.connect(function(err) {
     if (err) {
         console.error('error connecting: ' + err.stack);
@@ -25,6 +26,20 @@ connection.connect(function(err) {
 router.get('/', (req, res) => {
     console.log("In root")
 })
+
+//Middleware to authenticate the incoming requests with the Bearer token in the header
+const authenticateJWT = (req, res, next) => {
+    let authHeader = req.header.Authorization
+    if(!authHeader) return res.status(401).send({message: 'You are not authorized for this resource'})
+
+    let token = authHeader.split(' ')[1]
+    jwt.verify(token, secret_key, (err, user) => {
+        if(err) return res.status(403)
+        req.user = user
+        next()
+    })
+}
+
 
 //Get list of roles 
 router.get('/roles', async(req, res) => {

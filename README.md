@@ -12,6 +12,7 @@
 <li>Nodejs
 <li>Expressjs 4.x
 <li>Bcrytpjs
+<li>jsonwebtoken
 <li>Reactjs
 <li>Axios
 <li>React-router-dom
